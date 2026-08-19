@@ -220,19 +220,29 @@ jobs:
 
           test -n "$source_file"
           echo "Patching: $source_file"
+          echo "Before patch:"
           grep -n 'control_handle_lac_status' "$source_file"
 
+          # Function declaration
           sed -E -i \
             's/^static int control_handle_lac_status[[:space:]]*\((void)?\)[[:space:]]*;$/static int control_handle_lac_status(FILE *f, char *buf);/' \
             "$source_file"
 
+          # Function definition; keeps the opening brace intact.
           sed -E -i \
-            's/^static int control_handle_lac_status[[:space:]]*\((void)?\)[[:space:]]*$/static int control_handle_lac_status(FILE *f, char *buf)/' \
+            's/^static int control_handle_lac_status[[:space:]]*\((void)?\)/static int control_handle_lac_status(FILE *f, char *buf)/' \
             "$source_file"
 
+          echo "After patch:"
           grep -n 'control_handle_lac_status' "$source_file"
-          grep -Fq 'static int control_handle_lac_status(FILE *f, char *buf);' "$source_file"
-          grep -Fq 'static int control_handle_lac_status(FILE *f, char *buf)' "$source_file"
+
+          grep -Fq \
+            'static int control_handle_lac_status(FILE *f, char *buf);' \
+            "$source_file"
+
+          grep -Eq \
+            '^static int control_handle_lac_status\(FILE \*f, char \*buf\)[[:space:]]*\{' \
+            "$source_file"
           
       - name: Build
         working-directory: openwrt
