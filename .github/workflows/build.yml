@@ -183,6 +183,27 @@ jobs:
           BUILDER_REPO: ${{ github.workspace }}/builder
         run: bash builder/scripts/prepare-build.sh
 
+      - name: Fix xl2tpd for GCC 15
+        working-directory: openwrt
+        run: |
+          set -euo pipefail
+          source_file="feeds/packages/net/xl2tpd/src/xl2tpd.c"
+
+          test -f "$source_file"
+          grep -q '^static int control_handle_lac_status();$' "$source_file"
+          grep -q '^static int control_handle_lac_status()$' "$source_file"
+
+          sed -i \
+            's/^static int control_handle_lac_status();$/static int control_handle_lac_status(FILE *f, char *buf);/' \
+            "$source_file"
+
+          sed -i \
+            's/^static int control_handle_lac_status()$/static int control_handle_lac_status(FILE *f, char *buf)/' \
+            "$source_file"
+
+          grep -q '^static int control_handle_lac_status(FILE \*f, char \*buf);$' "$source_file"
+          grep -q '^static int control_handle_lac_status(FILE \*f, char \*buf)$' "$source_file"
+
       - name: Set reproducible-build env
         working-directory: openwrt
         run: |
