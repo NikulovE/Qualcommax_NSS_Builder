@@ -232,3 +232,9 @@ CONFIG_LIBCURL_HTTP_AUTH=y
 CONFIG_PACKAGE_libnghttp2=y
 CONFIG_PACKAGE_libnghttp3=y
 CONFIG_PACKAGE_libngtcp2=y
+
+
+CONFIG_PACKAGE_kmod-fs-nfs-common=y
+CONFIG_PACKAGE_kmod-fs-nfs=y
+CONFIG_PACKAGE_nfs-utils=y
+CONFIG_PACKAGE_rpcbind=y
