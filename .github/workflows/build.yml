@@ -262,7 +262,19 @@ jobs:
           CCACHE_MAXSIZE: 4G
         run: |
           set -euo pipefail
-          make -j"$(nproc)"
+          if ! make -j"$(nproc)"; then
+            echo "::warning::Parallel build failed; retrying single-threaded with V=sc for diagnostics"
+            echo "::group::Verbose single-threaded build retry"
+            set +e
+            make -j1 V=sc
+            rc=$?
+            set -e
+            echo "::endgroup::"
+            if (( rc != 0 )); then
+              echo "::error::Verbose retry failed with exit code $rc"
+              exit "$rc"
+            fi
+          fi
           staging_dir/host/bin/ccache -s
 
       - name: Upload images
