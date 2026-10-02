@@ -1,0 +1,40 @@
+packages/xl2tpd: backport C23 build fix
+
+OpenWrt packages currently ships xl2tpd 1.3.18. GCC 15 defaults to C23 and
+rejects its old-style LAC status handler prototype. Add the upstream xl2tpd
+fix as an OpenWrt package patch until the feed moves to xl2tpd 1.3.20+.
+
+--- /dev/null
++++ b/net/xl2tpd/patches/0003-Fix-compiling-with-C23.patch
+@@ -0,0 +1,31 @@
++From: Jaco Kroon <jaco@uls.co.za>
++Date: Wed, 20 Nov 2024 22:12:29 +0000
++Subject: [PATCH] xl2tpd: fix compiling with C23
++
++GCC 15 defaults to C23, where an empty parameter list means no parameters
++rather than an unspecified parameter list. Make the LAC status handler match
++the handler function pointer type.
++
++Backport of upstream commit cabd67927d8ed565c36cdd0cbf9b9dbd71606009.
++
++--- a/xl2tpd.c
+++++ b/xl2tpd.c
++@@ -74,7 +74,7 @@ static int control_handle_lac_hangup(FILE* resf, char* bufp);
++ static int control_handle_lac_disconnect(FILE* resf, char* bufp);
++ static int control_handle_lac_add_modify(FILE* resf, char* bufp);
++ static int control_handle_lac_remove(FILE* resf, char* bufp);
++-static int control_handle_lac_status();
+++static int control_handle_lac_status(FILE* resf, char* bufp);
++ static int control_handle_lns_remove(FILE* resf, char* bufp);
++
++ static struct control_requests_handler control_handlers[] = {
++@@ -1549,7 +1549,8 @@ static int control_handle_lac_remove(FILE* resf, char* bufp){
++     return 1;
++ }
++
++-static int control_handle_lac_status(){
+++static int control_handle_lac_status(FILE*, char*)
+++{
++     show_status ();
++     return 1;
++ }
