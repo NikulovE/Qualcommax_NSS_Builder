@@ -1,0 +1,38 @@
+{
+ "latest": "ppe-nss-20261122T055838Z-44991499410",
+ "releases": [
+  {
+   "tag": "ppe-nss-20261122T055838Z-44991499410",
+   "time": 1795345205,
+   "groups": [
+    "ipq60xx-1g",
+    "ipq60xx-512m",
+    "ipq807x-1g",
+    "ipq807x-256m",
+    "ipq807x-512m",
+    "ipq807x-6m-kernel",
+    "xiaomi_ax3600"
+   ]
+  }
+ ],
+ "flavours": {
+  "ppe-nss": {
+   "latest": "ppe-nss-20261122T055838Z-44991499410",
+   "releases": [
+    {
+     "tag": "ppe-nss-20261122T055838Z-44991499410",
+     "time": 1795345205,
+     "groups": [
+      "ipq60xx-1g",
+      "ipq60xx-512m",
+      "ipq807x-1g",
+      "ipq807x-256m",
+      "ipq807x-512m",
+      "ipq807x-6m-kernel",
+      "xiaomi_ax3600"
+     ]
+    }
+   ]
+  }
+ }
+}
